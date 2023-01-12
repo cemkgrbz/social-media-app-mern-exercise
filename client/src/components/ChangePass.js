@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
 function ChangePass() {
@@ -19,6 +19,11 @@ function ChangePass() {
         
         const response = await axios.post('/users/changepassword', {token})
         console.log("🚀 ~ getData ~ response", response)
+
+        if (response.data.success) {
+            alert('Password changed successfully')
+            navigate('/')
+        }
     }
 
     return ( 
@@ -59,7 +64,7 @@ function ChangePass() {
             </div>
             <div className="flex justify-center container mx-auto mt-6 mb-10 text-slate-100 text-sm">
                 <div className="flex flex-col sm:flex-row  justify-between md:w-1/2 items-center">
-                    <Link className='hover:text-red-500' to='/forgotpass'><div className="flex" >Login</div></Link>
+                    <Link className='hover:text-red-500' to='/'><div className="flex" >Login</div></Link>
                    
                 </div>
             </div>

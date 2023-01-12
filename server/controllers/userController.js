@@ -2,7 +2,7 @@ import User from '../models/User.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import sendEmail from '../utilities/email.js'
-import sendEmailWithTemplate from '../utilities/emailDynamic.js'
+import sendEmailDynamic from '../utilities/emailDynamic.js'
 
 const SALT_ROUNDS = 10;
 
@@ -143,7 +143,7 @@ export const changePass = async (req, res) => {
         console.log("🚀 ~ file: userController.js:144 ~ changePass ~ hashedPass", hashedPass)
        
         const updated = await User.findByIdAndUpdate(
-            decoded.id,
+            {_id: decoded.id},
             {password: hashedPass},
             {new: true}
         )
@@ -157,3 +157,4 @@ export const changePass = async (req, res) => {
         
     }
 }
+

@@ -2,7 +2,7 @@ import { useState } from "react";
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 
-function Login() {
+function Register() {
 
     const [data, setData] = useState({
         emailOrUsername: '',
@@ -15,7 +15,7 @@ function Login() {
     }
 
     return ( 
-        <div className="bg-blue-500 w-screen">
+        <div className="bg-blue-500 w-screen  ">
         <div className="flex justify-center container mx-auto my-auto w-screen h-screen items-center flex-col">
             <div className="text-slate-100 items-center">
                 <svg className="w-10 h-10 mx-auto pb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -53,7 +53,8 @@ function Login() {
             </div>
             <div className="flex justify-center container mx-auto mt-6 mb-10 text-slate-100 text-sm">
                 <div className="flex flex-col sm:flex-row  justify-between md:w-1/2 items-center">
-                <Link className='hover:text-red-500' to='/register'>Do you have an account already?</Link>
+                    <Link className='hover:text-red-500' to='/forgotpass'><div className="flex" >Forgot your password</div></Link>
+                    <Link className='hover:text-red-500' to='/register'><div className="flex " >Don't have an account? Get Started</div></Link>
                 </div>
             </div>
         </div>
@@ -61,4 +62,4 @@ function Login() {
      );
 }
 
-export default Login;
+export default Register;

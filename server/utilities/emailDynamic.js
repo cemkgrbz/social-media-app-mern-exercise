@@ -20,8 +20,8 @@ export default async function main(token, template) {
     
 
   const data = {
-    from: '"Fred Foo 👻" <cem_kg@hotmail.com>', // sender address
-    to: 'cemkgrbz@gmail.com', // list of receivers
+    from: '"Fred Foo 👻" <cemkgrbz@gmail.com>', // sender address
+    to: 'cem_kg@hotmail.com', // list of receivers
     subject: getSubject(template), // Subject line
     text: "Hello world?", // plain text body
     html: getHtml(template, token)
