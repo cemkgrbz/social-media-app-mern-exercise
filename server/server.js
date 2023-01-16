@@ -3,12 +3,14 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import db from './config/db.js'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 const app = express()
 
 db()
 
+app.use(cookieParser())
 app.use(express.json())
 app.use('/users', userRoutes) //middleware
 app.use('/posts', postRoutes)

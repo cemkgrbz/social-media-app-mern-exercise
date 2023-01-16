@@ -9,17 +9,32 @@ import EmailConfirm from './components/EmailConfirm'
 import ForgotPass from './components/ForgotPass';
 import ChangePass from './components/ChangePass';
 
+import LoginLayout from './layouts/LoginLayout'
+import UserLayout from './layouts/UserLayout'
+import ContextProvider from './components/Context';
+import Posts from './components/Posts';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-     <Routes>
-        <Route path='/' element={<Login />}/>
-        <Route path='/register' element={<Register />}/>        
-        <Route path='/emailconfirm/:token' element={<EmailConfirm />}/>
-        <Route path='/forgotpass' element={<ForgotPass />}/>
-        <Route path='/changepassword/:token' element={<ChangePass />}/>
-     </Routes>
-     <App />
-  </BrowserRouter>
+   <ContextProvider>
+      <BrowserRouter>
+         <Routes>
+
+               <Route element={<LoginLayout />}>
+                  <Route path='/' element={<Login />}/>
+                  <Route path='/register' element={<Register />}/>
+                  <Route path='/emailconfirm/:token' element={<EmailConfirm />}/>
+                  <Route path='/forgotpass' element={<ForgotPass />}/>
+                  <Route path='/changepassword/:token' element={<ChangePass />}/>
+            </Route>
+
+            <Route element={<UserLayout />}>
+               <Route path='/dashboard' element={<Posts />}/>
+            </Route>
+
+
+         </Routes>
+         <App />
+      </BrowserRouter>
+  </ContextProvider>
 );

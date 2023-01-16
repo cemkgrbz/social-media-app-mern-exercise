@@ -1,8 +1,12 @@
-import { useState } from "react";
-import {Link} from 'react-router-dom'
+import { useContext, useState } from "react";
+import {Link, useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import { AppContext } from "./Context";
 
 function Register() {
+
+    const {dispatch} = useContext(AppContext)
+    const navigate = useNavigate()
 
     const [data, setData] = useState({
         emailOrUsername: '',
@@ -12,6 +16,16 @@ function Register() {
     const handleLogin = async () => {
         const response = await axios.post('/users/login', data)
         console.log("🚀 ~ handleLogin ~ response", response)
+
+        if (response.data.success) {
+            
+            dispatch({
+                type: 'login',
+                payload: response.data.user
+            })
+
+            navigate('/dashboard')
+        }
     }
 
     return ( 
