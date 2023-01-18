@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import {FaPlusCircle} from 'react-icons/fa'
 import axios from 'axios'
 import {AppContext} from './Context.js'
+import Card from './Card'
 
 function Posts() {
 
@@ -99,7 +100,7 @@ function Posts() {
             }
             {
                 state.posts.map(item => (
-                    <div key={item._id}>{item.text}</div>
+                    <Card key={item._id} post={item} />
                 ))
             }
         </div>

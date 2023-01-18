@@ -34,7 +34,26 @@ export default function ContextProvider({children}) {
                     ...state,
                     posts: [...state.posts, action.payload]
                 }
+            
+            case 'deletePost':
+                return {
+                    ...state,
+                    posts: [...state.posts.filter(item => item._id !== action.payload)]
+                }
+            
                 
+            case 'editPost':
+
+                const postIdx = state.posts.findIndex(item => item._id === action.payload.postId)
+
+                const newPosts = [...state.posts]
+
+                newPosts[postIdx].text = action.payload.text
+
+                return {
+                    ...state,
+                    posts: [...newPosts]
+                }
             default:
             return state
         }
