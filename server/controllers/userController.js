@@ -14,22 +14,21 @@ export const register = async (req, res) => {
         const salt = await bcrypt.genSalt(SALT_ROUNDS)
 
         const hashedPass = await bcrypt.hash(req.body.password, salt)
-        console.log("🚀 ~ file: userController.js:16 ~ register ~ hashedPass", hashedPass)
+        console.log("🚀 ~ register ~ hashedPass", hashedPass)
 
         req.body.password = hashedPass
 
         const user = await User.create(req.body)
-        console.log("🚀 ~ file: userController.js:21 ~ register ~ user", user)
+        console.log("🚀 ~ register ~ user", user)
 
         const token = jwt.sign({id: user._id}, process.env.JWT, {expiresIn: '1h'})
-        console.log("🚀 ~ file: userController.js:24 ~ register ~ token", token)
 
         sendEmail(token)
 
         res.send({success: true})
         
     } catch (error) {
-        console.log("register ~ error", error.message)
+        console.log("🚀 ~ register ~ error", error.message)
 
         res.send({success: false, error: error.message})
         
@@ -105,20 +104,19 @@ export const forgotPass = async (req, res) => {
     try {
         console.log("🚀 ~ hello forgotPass ", req.body)
 
-        const user = await User.findOne({
-
-            $or: [
-                {username: req.body.emailOrUsername},
-                {email: req.body.emailOrUsername}
-            ]
-        })
-        console.log("🚀 ~ file: userController.js:116 ~ forgotPass ~ user", user)
-
+       const user = await User.findOne({
         
-        const token = jwt.sign({id: user._id}, process.env.JWT, {expiresIn: '1h'})
-        
-        sendEmailDynamic(token, 'forgotpass')
+        $or: [
+            {username: req.body.emailOrUsername},
+            {email: req.body.emailOrUsername}
+        ]
+       })
+       console.log("🚀 ~ forgotPass ~ user", user)
 
+       const token = jwt.sign({id: user._id}, process.env.JWT, {expiresIn: '1h'}) 
+
+       sendEmailDynamic(token, 'forgotpass')
+       
         res.send({success: true})
         
     } catch (error) {
@@ -135,19 +133,21 @@ export const changePass = async (req, res) => {
         console.log("🚀 ~ hello changePass ", req.body)
 
         const decoded = jwt.verify(req.body.token, process.env.JWT)
-        console.log("🚀 ~ file: userController.js:139 ~ changePass ~ decoded", decoded)
+        console.log("🚀 ~ changePass ~ decoded", decoded)
 
         const salt = await bcrypt.genSalt(SALT_ROUNDS)
 
         const hashedPass = await bcrypt.hash(req.body.password, salt)
-        console.log("🚀 ~ file: userController.js:144 ~ changePass ~ hashedPass", hashedPass)
+        console.log("🚀 ~ changePass ~ hashedPass", hashedPass)
        
+
         const updated = await User.findByIdAndUpdate(
-            {_id: decoded.id},
+            decoded.id,
             {password: hashedPass},
             {new: true}
         )
-        console.log("🚀 ~ file: userController.js:151 ~ changePass ~ updated", updated)
+        console.log("🚀 ~ changePass ~ updated", updated)
+
         res.send({success: true})
         
     } catch (error) {
@@ -161,10 +161,10 @@ export const changePass = async (req, res) => {
 export const logout = async (req, res) => {
 
     try {
-        console.log("🚀 ~ hello logout ", req.body)
+        console.log("🚀 ~ hello logout ")
 
         res.clearCookie('e04')
-        
+
         res.send({success: true})
         
     } catch (error) {
@@ -175,3 +175,30 @@ export const logout = async (req, res) => {
     }
 }
 
+export const updateProfile = async (req, res) => {
+
+    try {
+        console.log("🚀 ~ hello updateProfile ", req.body)
+        console.log("🚀 ~ hello updateProfile FILE: ", req.file)
+
+        if (req.file) req.body.image = req.file.path
+
+        const user = await User.findByIdAndUpdate(
+            req.user,
+            req.body,
+            {new: true}
+        ).select('-password -__v')
+
+        console.log("🚀 ~ updateProfile ~ user", user)
+
+        if (!user) return res.send({success: false, errorId: 1}) // user not found
+
+        res.send({success: true, user})
+        
+    } catch (error) {
+        console.log("🚀 ~ updateProfile ~ error", error.message)
+
+        res.send({success: false, error: error.message})
+        
+    }
+}

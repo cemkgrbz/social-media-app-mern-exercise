@@ -19,8 +19,8 @@ const userSchema = new Schema({
         required: true
     },
     image: String,
+    address: String,
     age: Number,
-    location: String,
     hobbies: [],
     gender: String,
     verified: {

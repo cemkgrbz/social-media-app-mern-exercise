@@ -13,6 +13,8 @@ import LoginLayout from './layouts/LoginLayout'
 import UserLayout from './layouts/UserLayout'
 import ContextProvider from './components/Context';
 import Posts from './components/Posts';
+import Profile from './components/Profile'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -30,6 +32,7 @@ root.render(
 
             <Route element={<UserLayout />}>
                <Route path='/dashboard' element={<Posts />}/>
+               <Route path='/profile' element={<Profile />}/>
             </Route>
 
 

@@ -54,6 +54,14 @@ export default function ContextProvider({children}) {
                     ...state,
                     posts: [...newPosts]
                 }
+
+                case 'userSaved':
+
+                return {
+                    ...state,
+                    user: {...action.payload}
+                }
+                
             default:
             return state
         }

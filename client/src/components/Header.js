@@ -10,7 +10,7 @@ function Header() {
 
     const navigate = useNavigate()
 
-    const {dispatch} = useContext(AppContext)
+    const {state, dispatch} = useContext(AppContext)
 
     const handleLogout = async () => {
 
@@ -31,6 +31,7 @@ function Header() {
             <Link to='/dashboard'><FaHome className='hover:text-slate-600'/> </Link>
             <Link to='/profile'><CgProfile className='hover:text-slate-600'/> </Link>
             <FiLogOut className='hover:text-slate-600 cursor-pointer' onClick={handleLogout}/>
+            <img className='w-[50px] h-[50px] object-cover rounded-full' src={state.user.image}/>
         
 
         </div>
