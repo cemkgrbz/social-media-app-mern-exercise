@@ -21,7 +21,7 @@ const userSchema = new Schema({
     image: String,
     address: String,
     age: Number,
-    hobbies: [],
+    hobbies: [String],
     gender: String,
     verified: {
         type: Boolean,

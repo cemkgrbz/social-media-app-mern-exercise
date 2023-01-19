@@ -183,6 +183,8 @@ export const updateProfile = async (req, res) => {
 
         if (req.file) req.body.image = req.file.path
 
+        req.body.hobbies = JSON.parse(req.body.hobbies)
+
         const user = await User.findByIdAndUpdate(
             req.user,
             req.body,
