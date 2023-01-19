@@ -53,7 +53,6 @@ function Card({post}) {
         }
     }
 
-
     return ( 
         <div className='flex flex-col gap-[20px] border-2 border-slate-500 rounded-md w-[400px]  p-[20px]'>
             <div className='flex items-center gap-[10px] w-full justify-end'>
