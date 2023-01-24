@@ -1,13 +1,20 @@
 import {GoKebabHorizontal} from 'react-icons/go'
+import {AiFillHeart, AiOutlineHeart} from 'react-icons/ai'
+import {FaRegComments} from 'react-icons/fa'
 import Popover from '@mui/material/Popover';
 import { useContext, useState } from 'react';
 import axios from 'axios';
 import { AppContext } from './Context';
 import Modal from './Modal'
+import Spinner from './Spinner';
+
+import NewComment from './CommentAdd'
+import Comment from './Comment'
 
 function Card({post}) {
 
-    const {dispatch} = useContext(AppContext)
+    const {state, dispatch} = useContext(AppContext)
+    const [loading, setLoading] = useState(false)
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -53,6 +60,42 @@ function Card({post}) {
         }
     }
 
+    const handleLikeClick = async () => {
+
+        setLoading(true)
+
+        const response = await axios.patch('/posts/likes', {postId: post._id})
+        console.log("🚀 ~ handleLikeClick ~ reponse", response)
+
+        if (response.data.success) dispatch({
+            type: 'like',
+            payload: {
+                postId: post._id,
+                likes: response.data.likes
+            }
+        })
+
+        setLoading(false)
+    }
+
+    const handleSendComment = async (e, comment, updateValue) => {
+
+        e.preventDefault()
+        const response = await axios.post('/posts/comments/add', {
+            postId: post._id,
+            comment
+        })
+        console.log("🚀 ~ handleSendComment ~ response", response)
+
+        if (response.data.success) dispatch({
+            type: 'addComment',
+            payload: {
+                postId: post._id,
+                comments: response.data.comments
+            }
+        })
+    }
+
     return ( 
         <div className='flex flex-col gap-[20px] border-2 border-slate-500 rounded-md w-[400px]  p-[20px]'>
             <div className='flex items-center gap-[10px] w-full justify-end'>
@@ -86,6 +129,42 @@ function Card({post}) {
             </div>
             {post.text}
             <hr />
+            {
+                post.image &&
+                    <img className='w-full object-cover h-[250px] rounded-md' src={post.image} alt='' />
+                
+            }
+            <hr />
+            <div className='flex justify-around items-center'>
+                <div className='flex gap-[20px]' onClick={handleLikeClick}>
+                    {
+                        loading ? <Spinner /> :
+                        
+                        post.likes.includes(state.user._id) ?
+                        <>
+                        <AiFillHeart className='text-red-500 text-[2rem] cursor-pointer'/> <span>{post.likes.length}</span>
+                        </>
+                        :
+                            <>
+                            <AiOutlineHeart className='text-red-500 text-[2rem] cursor-pointer'/> 
+                            <span>{post.likes.length}</span>
+                            </>
+                    }
+                </div>
+                
+                <FaRegComments className='text-slate-500 hover:text-red-500 text-[2rem] cursor-pointer' />
+            </div>
+            
+            <hr />
+                {
+                    post.comments.map(item => <Comment 
+                        key={item._id} 
+                        item={item}
+                        postId={post._id}
+                        />)
+                }
+                
+               <NewComment handleSend={handleSendComment}/>     
 
             {
                 editPostModalOpen && 

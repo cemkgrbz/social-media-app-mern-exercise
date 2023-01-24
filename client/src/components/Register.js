@@ -15,7 +15,7 @@ function Register() {
     const handleRegister = async () => {
 
         const response = await axios.post('/users/register', data)
-        console.log("🚀 ~ file: Register.js:18 ~ handleRegister ~ response", response)
+        console.log("🚀 ~ handleRegister ~ response", response)
 
         if (response.data.success) navigate('/')
 

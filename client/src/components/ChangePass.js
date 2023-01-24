@@ -1,11 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
 function ChangePass() {
 
     const {token} = useParams()
-
     const navigate = useNavigate()
 
     const [data, setData] = useState({
@@ -17,7 +16,11 @@ function ChangePass() {
 
         if (!data.password || data.password !== data.retypepassword) return alert('Passwords do not match')
         
-        const response = await axios.post('/users/changepassword', {token})
+        const response = await axios.post('/users/changepassword', {
+            token,
+            password: data.password
+        })
+
         console.log("🚀 ~ getData ~ response", response)
 
         if (response.data.success) {

@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { Navigate, Outlet } from "react-router-dom"
-import { AppContext } from "../components/Context";
 import Header from "../components/Header";
+import { Navigate, Outlet } from "react-router-dom";
+import { useContext } from "react";
+import { AppContext } from "../components/Context";
 
 function UserLayout() {
 
@@ -10,12 +10,11 @@ function UserLayout() {
     if (state.user._id) {
 
         return ( 
-            <div>
-            <Header />
-            <Outlet /> 
-
-        </div>
-     );
+            <>
+                <Header/>
+                <Outlet />
+            </>
+         );
     } else {
         return <Navigate to='/'/>
     }

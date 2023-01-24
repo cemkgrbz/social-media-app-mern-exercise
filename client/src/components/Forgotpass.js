@@ -12,8 +12,8 @@ function ForgotPass() {
 
         const response = await axios.post('/users/forgotpass', data)
         console.log("🚀 ~ handleSubmit ~ response", response)
-        
-        if(response.data.success) return alert("We sent you an email")
+
+        if (response.data.success) alert('We have sent you an email with instructions about how to change your password')
     }
 
     return ( 

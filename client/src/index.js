@@ -6,7 +6,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Login from './components/Login'
 import Register from './components/Register'
 import EmailConfirm from './components/EmailConfirm'
-import ForgotPass from './components/ForgotPass';
+import ForgotPass from './components/Forgotpass';
 import ChangePass from './components/ChangePass';
 
 import LoginLayout from './layouts/LoginLayout'
@@ -14,7 +14,6 @@ import UserLayout from './layouts/UserLayout'
 import ContextProvider from './components/Context';
 import Posts from './components/Posts';
 import Profile from './components/Profile'
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

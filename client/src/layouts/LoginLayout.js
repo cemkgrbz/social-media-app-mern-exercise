@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
 
 function LoginLayout() {
-    return ( 
-        <Outlet /> 
-     );
+    return (  
+        <Outlet />
+    );
 }
 
 export default LoginLayout;

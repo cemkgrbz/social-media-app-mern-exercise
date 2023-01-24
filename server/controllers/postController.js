@@ -32,7 +32,8 @@ export const list = async (req, res) => {
         const posts = await Post
         .find()
         .select('-__v')
-        .populate({path: 'owner', select: 'username email image'})
+        .populate({path: 'owner', select: 'username email image'}) // post owner
+        .populate({path: 'comments.owner', select: 'username email image'}) // comment owner
 
         res.send({success: true, posts})
         
@@ -91,6 +92,55 @@ export const edit = async (req, res) => {
         
     } catch (error) {
         console.log("🚀 ~ edit ~ error", error.message)
+
+        res.send({success: false, error: error.message})
+        
+    }
+}
+
+export const like = async (req, res) => {
+
+    try {
+        console.log("🚀 ~ hello like ", req.body)
+
+        const post = await Post.findById(req.body.postId)
+        console.log("🚀 ~ like ~ post", post)
+
+        const user = post.likes.includes(req.user)
+        console.log("🚀 ~ like ~ user", user)
+
+        let newPost = {}
+
+        if (user) { // user IS in the likes array
+
+            newPost = await Post.findByIdAndUpdate(
+                req.body.postId,
+                {
+                    $pull: { // deletes all items that match the criteria
+                        likes: req.user
+                    }
+                },
+                {new: true}
+            )
+            console.log("🚀 ~ like ~ newPost", newPost)
+        } else {// user is NOT in the likes array
+
+            newPost = await Post.findByIdAndUpdate(
+                req.body.postId,
+                {
+                    $addToSet: {
+                        likes: req.user
+                    }
+                },
+                {new: true}
+            )
+            console.log("🚀 ~ like ~ newPost", newPost)
+        }
+
+        res.send({success: true, likes: newPost.likes})
+        
+    } catch (error) {
+        console.log("🚀 ~ like ~ error", error.message)
 
         res.send({success: false, error: error.message})
         
