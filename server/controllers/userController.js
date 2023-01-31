@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import sendEmail from '../utilities/email.js'
 import sendEmailDynamic from '../utilities/emailDynamic.js'
+import { validationResult } from 'express-validator'
+import CustomError from '../config/CustomError.js'
 
 const SALT_ROUNDS = 10;
 
@@ -10,6 +12,17 @@ export const register = async (req, res) => {
 
     try {
         console.log("🚀 ~ hello register ", req.body)
+
+        const errors = validationResult(req)
+        console.log("🚀 ~ errors", errors)
+
+        if (!errors.isEmpty()) { // !errors.isEmpty() => there are errors
+            return res.send({success:false, errors: errors.array() });
+          }
+
+        // if (!req.body.username || !req.body.email) return res.send({success: false, errorId: 0})
+
+        // if (req.body.username.length < 3) return res.send({success: false, errorId: 2})
 
         const salt = await bcrypt.genSalt(SALT_ROUNDS)
 
@@ -35,10 +48,17 @@ export const register = async (req, res) => {
     }
 }
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
 
     try {
         console.log("🚀 ~ hello login ", req.body)
+
+        const errors = validationResult(req)
+        console.log("🚀 ~ errors", errors)
+
+        if (!errors.isEmpty()) { // !errors.isEmpty() => there are errors
+            return res.send({success:false, errors: errors.array() });
+          }
 
         const user = await User.findOne({
             $or: [{username: req.body.emailOrUsername}, {email: req.body.emailOrUsername}]
@@ -46,12 +66,14 @@ export const login = async (req, res) => {
 
         console.log("🚀 ~ login ~ user", user)
 
-        if (!user) return res.send({success: false, errorId: 1})
+        if (!user) return next(new CustomError(400, 'Wrong Credentials')) 
+        // if (!user) return res.send({success: false, errorId: 1})
 
         const passMatch = await bcrypt.compare(req.body.password, user.password)
         console.log("🚀 ~ login ~ passMatch", passMatch)
 
-        if (!passMatch) return res.send({success: false, errorId: 1})
+        if (!passMatch) return next(new Error('Wrong Credentials'))
+        // if (!passMatch) return res.send({success: false, errorId: 1})
 
         const newUser = user.toObject()
 

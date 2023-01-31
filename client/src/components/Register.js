@@ -14,10 +14,21 @@ function Register() {
 
     const handleRegister = async () => {
 
-        const response = await axios.post('/users/register', data)
-        console.log("🚀 ~ handleRegister ~ response", response)
-
-        if (response.data.success) navigate('/')
+        try {
+            
+            const response = await axios.post('/users/register', data)
+            console.log("🚀 ~ handleRegister ~ response", response)
+    
+            if (response.data.success) {
+                navigate('/')
+            } else {
+                if (response.data.errorId === 2) alert('Username must be more than 2 characters')
+                
+            }
+        } catch (error) {
+           console.log("🚀 ~ error", error.message)
+           
+        }
 
     }
 

@@ -64,7 +64,7 @@ function Card({post}) {
 
         setLoading(true)
 
-        const response = await axios.patch('/posts/likes', {postId: post._id})
+        const response = await axios.patch('http://localhost:4000/posts/likes', {postId: post._id},  {withCredentials: true})
         console.log("🚀 ~ handleLikeClick ~ reponse", response)
 
         if (response.data.success) dispatch({

@@ -19,7 +19,7 @@ function Posts() {
 
         const getData = async () => {
 
-            const response = await axios.get('/posts/list')
+            const response = await axios.get('http://localhost:4000/posts/list', {withCredentials: true})
             console.log("🚀 ~ getData ~ response", response)
 
             if (response.data.success) dispatch({

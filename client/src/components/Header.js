@@ -14,7 +14,7 @@ function Header() {
 
     const handleLogout = async () => {
 
-        const response = await axios.get('/users/logout')
+        const response = await axios.get('http://localhost:4000/users/logout')
         console.log("🚀 ~ handleLogout ~ response", response)
 
         dispatch({

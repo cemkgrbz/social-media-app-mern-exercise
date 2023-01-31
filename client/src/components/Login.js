@@ -14,18 +14,27 @@ function Register() {
         password: ''
     })
 
+    const [errorText, setErrorText] = useState('')
+
     const handleLogin = async () => {
-        const response = await axios.post('/users/login', data)
-        console.log("🚀 ~ handleLogin ~ response", response)
-
-        if (response.data.success) {
-
-            dispatch({
-                type: 'login',
-                payload: response.data.user
-            })
-
-            navigate('/dashboard')
+        try {
+            
+            const response = await axios.post("http://localhost:4000/users/login", data)
+            console.log("🚀 ~ handleLogin ~ response", response)
+    
+            if (response.data.success) {
+    
+                dispatch({
+                    type: 'login',
+                    payload: response.data.user
+                })
+    
+                navigate('/dashboard')
+            }
+        } catch (error) {
+            
+            console.log(error.response.data)
+            setErrorText(error.response.data)
         }
     }
 
@@ -58,7 +67,7 @@ function Register() {
                         placeholder="Password"
                         className="w-full py-4 px-8 bg-slate-200 placeholder:font-semibold rounded hover:ring-1 hover:ring-gray-600 outline-slate-500  border-solid border-2 border-slate-300"  />
                 </div>
-
+                <div className="w-3/4 mb-6 text-red-500 h-[1rem]">{errorText}</div>
                 <div className="w-3/4 mb-12">
                     <button 
                         type="submit" 
